@@ -47,7 +47,6 @@ type SearchResult struct {
 	TotalJokes int             `json:"total_jokes"`
 }
 
-
 func getRandomJoke() {
 	url := "https://icanhazdadjoke.com/"
 	responseBytes := getJokeData(url)
@@ -58,16 +57,14 @@ func getRandomJoke() {
 	fmt.Println(string(joke.Joke))
 }
 
-
 func getRandomJokeWithTerm(jokeTerm string) {
 	url := fmt.Sprintf("https://icanhazdadjoke.com/search?term=%s", jokeTerm)
-	responseByte
-	s := getJokeData(url)
+	responseBytes := getJokeData(url)
 	jokeListRaw := SearchResult{}
 	if err := json.Unmarshal(responseBytes, &jokeListRaw); err != nil {
 		log.Fatalf("Could not unmarshal response: %v", err)
 	}
-	
+
 	if jokeListRaw.TotalJokes == 0 {
 		log.Fatalf("No results found for the search term: %v", jokeTerm)
 	}
@@ -80,8 +77,7 @@ func getRandomJokeWithTerm(jokeTerm string) {
 }
 
 func getJokeData(baseAPI string) []byte {
-	reques
-	t, err := http.NewRequest(
+	request, err := http.NewRequest(
 		http.MethodGet,
 		baseAPI,
 		nil,
@@ -90,13 +86,12 @@ func getJokeData(baseAPI string) []byte {
 		log.Fatalf("Could not create request: %v", err)
 
 	}
-	
+
 	request.Header.Add("Accept", "application/json")
 	request.Header.Add("User-Agent", "dad CLI")
 
 	response, err := http.DefaultClient.Do(request)
-	if err != nil 
-	{
+	if err != nil {
 		log.Fatalf("Could not receive response: %v", err)
 	}
 
